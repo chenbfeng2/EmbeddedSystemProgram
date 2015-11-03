@@ -1,0 +1,15 @@
+02:36:30 **** Build of configuration Default for project BBBIOlib ****
+make all 
+C:/Tools/gcc-linaro//bin/arm-linux-gnueabihf-gcc -O0 -g3 -Wall -fmessage-length=0 -c ./BBBio_lib/BBBiolib_PWMSS.c -o ./BBBio_lib/BBBiolib_PWMSS.o
+C:/Tools/gcc-linaro//bin/arm-linux-gnueabihf-gcc -O0 -g3 -Wall -fmessage-length=0 -c ./BBBio_lib/BBBiolib_McSPI.c -o ./BBBio_lib/BBBiolib_McSPI.o
+C:/Tools/gcc-linaro//bin/arm-linux-gnueabihf-gcc -O0 -g3 -Wall -fmessage-length=0 -c ./BBBio_lib/BBBiolib_ADCTSC.c -o ./BBBio_lib/BBBiolib_ADCTSC.o
+./BBBio_lib/BBBiolib_ADCTSC.c: In function 'BBBIO_ADCTSC_Init':
+./BBBio_lib/BBBiolib_ADCTSC.c:500:15: warning: variable 'FIFO_data' set but not used [-Wunused-but-set-variable]
+  unsigned int FIFO_data = 0;
+               ^
+C:/Tools/gcc-linaro//bin/arm-linux-gnueabihf-gcc -O0 -g3 -Wall -fmessage-length=0 -O0 -g3 -Wall -fmessage-length=0 -c ./BBBio_lib/BBBiolib.c -o ./BBBio_lib/BBBiolib.o
+C:/Tools/gcc-linaro//bin/arm-linux-gnueabihf-ar -rs ./BBBio_lib/libBBBio.a ./BBBio_lib/BBBiolib.o ./BBBio_lib/BBBiolib_PWMSS.o ./BBBio_lib/BBBiolib_McSPI.o ./BBBio_lib/BBBiolib_ADCTSC.o
+C:/Tools/GnuWin32//bin/cp ./BBBio_lib/libBBBio.a ./
+
+02:36:31 Build Finished (took 954ms)
+

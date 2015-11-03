@@ -1,0 +1,13 @@
+15:26:39 **** Build of configuration Debug for project Demo_LED ****
+make Demo_LED 
+'Building file: ../LED.c'
+'Invoking: Cross GCC Compiler'
+arm-linux-gnueabihf-gcc -I"C:\Users\chenbfeng2\workspace\Demo_LED" -I"C:\Users\chenbfeng2\workspace\BBBio_lib" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"LED.d" -MT"LED.d" -o "LED.o" "../LED.c"
+../LED.c:4:38: fatal error: ../../BBBio_lib/BBBiolib.h: No such file or directory
+ #include "../../BBBio_lib/BBBiolib.h"
+                                      ^
+compilation terminated.
+make: *** [LED.o] Error 1
+
+15:26:39 Build Finished (took 219ms)
+

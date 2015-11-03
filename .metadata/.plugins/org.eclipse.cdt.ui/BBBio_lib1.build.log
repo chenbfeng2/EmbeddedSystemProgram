@@ -1,0 +1,11 @@
+14:50:59 **** Incremental Build of configuration Debug for project BBBio_lib1 ****
+make all 
+'Building file: ../BBBiolib.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -MMD -MP -MF"BBBiolib.d" -MT"BBBiolib.o" -c -o "BBBiolib.o" "../BBBiolib.c"
+'arm-none-eabi-gcc' is not recognized as an internal or external command,
+operable program or batch file.
+make: *** [BBBiolib.o] Error 1
+
+14:51:00 Build Finished (took 141ms)
+

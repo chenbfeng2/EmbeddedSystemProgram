@@ -1,0 +1,6 @@
+15:24:55 **** Incremental Build of configuration Debug for project reverse ****
+make all 
+make: Nothing to be done for `all'.
+
+15:24:55 Build Finished (took 127ms)
+

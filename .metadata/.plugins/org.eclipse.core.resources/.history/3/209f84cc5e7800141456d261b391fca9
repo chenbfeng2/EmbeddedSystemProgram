@@ -1,0 +1,463 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>  /* semaphore operations */
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <sys/time.h>
+#include <errno.h>
+#include <math.h>
+
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+struct row {int* r[3000];
+			int rdpt;
+			int wrtpt;
+			} ;
+struct data {
+			char* line[100];
+			int rdpt;
+};
+struct row dataout[16];
+int tempBuffer[17][300];
+int numberArray[31];
+
+#define NSEC_PER_SEC 1000000000ULL
+
+static struct timespec r;
+static long long int period;
+
+//add a specific time slot to the current time
+static inline void timespec_add_us(uint64_t d)
+{
+    d *= 1000;
+    d += r.tv_nsec;
+    //printf("%lld\n",d);
+    //check if the nanosecond is overflowed.
+    while (d >= NSEC_PER_SEC) {
+        d -= NSEC_PER_SEC;
+	r.tv_sec = r.tv_sec+1;
+    }
+    r.tv_nsec = d;
+    //printf("%d,%lld\n",r.tv_sec,r.tv_nsec);
+}
+
+//calculate the time difference of the timeout.
+long long int diff(struct timespec start, struct timespec end)
+{
+	long long int temp;
+	if ((end.tv_nsec-start.tv_nsec)<0) {
+		temp = (end.tv_sec-start.tv_sec-1)*1000000000;
+		temp += 1000000000+end.tv_nsec-start.tv_nsec;
+	} else {
+		temp = (end.tv_sec-start.tv_sec)*1000000000;
+		temp+=end.tv_nsec-start.tv_nsec;
+	}
+	return temp;
+}
+
+//print the time out every 200ms
+static long long int wait_next_activation(int i)
+{	int s=0;
+	struct timespec start;
+	struct timespec end;
+	long long int temp=0;
+	//get the real time clock start time
+	clock_gettime(CLOCK_REALTIME,&start);
+	//time out for 200ms
+    s=clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &r, NULL);
+    //record the time out stop time
+    clock_gettime(CLOCK_REALTIME,&end);
+    //print the time out information
+    /*if (s==0)
+    	{
+    	printf("timer called %d!\n",i);
+    	}
+	*/
+
+    timespec_add_us(period);
+    //clock_gettime(CLOCK_REALTIME,&end);
+    temp=diff(start,end);
+    return temp;
+}
+
+//initial the timer
+static int start_periodic_timer(uint64_t offs, int t)
+{
+    clock_gettime(CLOCK_REALTIME, &r);
+    timespec_add_us(offs);
+    period = t;
+    return 0;
+}
+
+/*void timerthread(void)
+{
+    int i=0;
+    long long int s=200000;
+    unsigned long long int differ[100];
+	unsigned long long int sum=0;
+	long long int sd=0;
+    uint64_t ss=200000;
+    start_periodic_timer(ss,s);
+    //calculate the time difference for every interaction.
+    for (i=0;i<100;i++) {
+    	differ[i]=wait_next_activation(i);
+    	printf("%lld\n",differ[i]);
+    }
+    //Calculate the average timeout.
+   /* for (i=0;i<100; i++)
+    {
+    	sum+=differ[i];
+    }
+    printf("average time out %lld\n",sum/100);
+
+    //calculate the standard deviation.
+    for (i=0;i<100;i++)
+    {
+    	sd+=(differ[i]-sum/100)*(differ[i]-sum/100);
+    }
+    long long int result=0;
+    result= sqrt(sd);
+    printf("stand divireation %lld\n",result);}*/
+	int databuild(void)
+{
+	int length=0;
+	length=sizeof(numberArray)/sizeof(numberArray[0]);
+	int x=0,y=0,z=0;
+	int tempTime,tempType,tempLine;
+	int line1=0,line2=4,line3=8,line4=12;
+	int previousTime1=1999;
+	int previousTime2=1999;
+	int previousTime3=1999;
+	int previousTime4=1999;
+
+	for (x=0;x<length;x++)
+	{
+		tempTime=((numberArray[x])/100)-10000;
+		tempType=numberArray[x]%10;
+		tempLine=(numberArray[x]%100)/10;
+		//printf("fhefwjpf is %d, %d ,%d, %d\n",length ,tempTime,tempType,tempLine);
+		switch(tempLine)
+		{
+		case 1:
+			//printf("case 1\n");
+			fflush(stdout);
+			patternGeneration(line1,tempType,tempTime,previousTime1);
+			//printf("%s\n",tempBuffer[2]);
+			/*for (y=0;y<4;y++)
+			{
+			strcat(dataout[y],tempBuffer[y]);
+		}*/
+			previousTime1=tempTime;
+			//memset(tempBuffer, 0, sizeof tempBuffer);
+			break;
+		case 2:
+			patternGeneration(line2, tempType,tempTime,previousTime2);
+
+			previousTime2=tempTime;
+			//memset(tempBuffer, 0, sizeof tempBuffer);
+			break;
+		case 3:
+			patternGeneration(line3,tempType,tempTime,previousTime3);
+
+			previousTime3=tempTime;
+			//memset(tempBuffer, 0, sizeof tempBuffer);
+			break;
+		case 4:
+			patternGeneration(line4,tempType,tempTime,previousTime4);
+			previousTime4=tempTime;
+			//memset(tempBuffer, 0, sizeof tempBuffer);
+			break;
+		default:
+			printf("recognize fault\n");
+			break;
+		}
+	}
+return 0;
+}
+void datainitial(void)
+{	int k=0;
+	int i=0,j=0,a;
+	int n;
+	FILE *myFile;
+	int num;
+	    myFile = fopen("test.txt", "r");
+	    while(fscanf(myFile, "%d", &num) > 0) {
+	        numberArray[i] = num;
+	        printf("%d\n",numberArray[i]);
+	        i++;
+	    }
+	    printf("scan finished");
+	    fclose(myFile);
+	    n=sizeof(numberArray)/sizeof(int);
+	for (i = 0; i < n; ++i)
+	    {
+	        for (j = i + 1; j < n; ++j)
+	        {
+	            if (numberArray[i] < numberArray[j])
+	            {
+	                a = numberArray[i];
+	                numberArray[i] = numberArray[j];
+	                numberArray[j] = a;
+	            }
+	        }
+	    }
+	for (k=0;k<16;k++)
+	{
+		dataout[k].wrtpt=0;
+		dataout[k].rdpt=1999+65-60;
+	}
+
+}
+void datafinalize(void)
+{
+	int i=0,j=0,k=0;
+	for(i=0;i<16;i++)
+	{
+		for (j=0;j<65;j++)
+		{
+			dataout[i].r[dataout[i].wrtpt]=0;
+			dataout[i].wrtpt++;
+		}
+	}
+}
+
+void patternGeneration(int lineNum, int tempType, int tempTime, int previousTime)
+{
+	//int filedata[]={1000011,1000021,1000031,1000041,1000111,1000521,1000731,1000741,1001041,1001111,1001521,1001831};
+	int linebuffer[100];
+	//int length=sizeof(filedata);
+	int star[4][3] = {{0,0,0},{0,1,0},{1,1,1},{0,1,0}};
+	char *end[4] = { "    "," oo ", "oooo", " oo "};
+	char *swift[4] = { "    "," oo ", "oooo", " oo "};
+	//char *channel[4][10000];
+	int x=0,y=0,z=0;
+	int timeInterval=previousTime-tempTime;
+	char line[]="-";
+	char empty[]=" ";
+		switch (tempType) {
+		case 1:
+			for (y=0;y<4;y++)
+					{
+				for (z=3;z<timeInterval;z++)
+				{
+					dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=0;
+					dataout[lineNum+y].wrtpt++;
+				}
+				for(x=0;x<3;x++) {
+					dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=star[y][x];
+										dataout[lineNum+y].wrtpt++;
+				}
+				}
+		  break;
+		case 2:
+			for (y=0;y<4;y++)
+					{
+				for (z=0;z<timeInterval;z++)
+								{
+									dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=0;
+									dataout[lineNum].wrtpt++;
+								}
+								for(x=0;x<3;x++) {
+									dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=star[y][x];
+									dataout[lineNum+y].wrtpt++;
+								}
+								}
+
+						  break;
+
+		case 3:
+			for (y=0;y<4;y++)
+								{
+				for (z=0;z<timeInterval;z++)
+								{
+									dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=0;
+									dataout[lineNum+y].wrtpt++;
+								}
+								for(x=0;x<3;x++) {
+									dataout[lineNum+y].r[dataout[lineNum+y].wrtpt]=star[y][x];
+									dataout[lineNum+y].wrtpt++;
+								}
+								}
+
+			break;
+
+		default:
+		  // Code
+		  break;
+	}
+		//return (char*)channel;
+}
+
+int main (void) {
+
+
+	char *buffer[17][400];
+	int i=0,j=0,k=0,q=0,p=0;
+	int max=0;
+	char space[2000]="";
+	char empty[2]=" ";
+	int size=0;
+	char *star[4] = { "   "," | ", "-o-", " | "};
+	char *colorReset=ANSI_COLOR_RESET;
+	char finalout[3000]="";
+	char *output[17][50];
+	char enter[2]="\n";
+	int speed=2;
+	char* blue= ANSI_COLOR_BLUE;
+	char* Green=ANSI_COLOR_GREEN;
+	char* yellow=ANSI_COLOR_YELLOW;
+	char* mag=ANSI_COLOR_MAGENTA;
+	 int m=0;
+	    long long int s=10000;
+	    unsigned long long int differ[100];
+		unsigned long long int sum=0;
+		long long int sd=0;
+	    uint64_t ss=10000;
+	    start_periodic_timer(ss,s);
+	    //calculate the time difference for every interaction.
+	datainitial();
+	databuild();
+	datafinalize();
+	char pattern[2]="o";
+	printf("game start");
+	sleep(1);
+	for (k=0;k<1500;k++)
+	{
+		i=0;
+		strcat(buffer,blue);
+		for (q=0;q<4;q++)
+		{
+
+			for (i=0;i<60;i++)
+						{
+						if (dataout[q].r[(dataout[q].rdpt)+i]==1)
+						{
+							strcat(buffer,pattern);
+						}
+						else
+						{
+							strcat(buffer,empty);
+						}
+						}
+			dataout[q].rdpt-=speed;
+			strcat(finalout,buffer);
+			strcat(finalout,enter);
+			memset(buffer, 0, sizeof buffer);
+			i=0;
+		}
+
+		strcat(buffer,yellow);
+		for (q=0;q<4;q++)
+		{
+
+			for (i=0;i<60;i++)
+								{
+								if (dataout[q+4].r[(dataout[q+4].rdpt)+i]==1)
+								{
+									strcat(buffer,pattern);
+								}
+								else
+								{
+									strcat(buffer,empty);
+												}
+								}
+					dataout[q+4].rdpt-=speed;
+					//printf("%s",buffer);
+					//strcat(buffer,temp);
+					//strncpy(output[q+9],buffer,65);
+					strcat(finalout,buffer);
+					strcat(finalout,enter);
+					memset(buffer, 0, sizeof buffer);
+					i=0;
+				}
+
+		strcat(buffer,Green);
+		for (q=0;q<4;q++)
+				{
+
+			for (i=0;i<60;i++)
+					{
+								if (dataout[q+8].r[(dataout[q+8].rdpt)+i]==1)
+								{
+									strcat(buffer,pattern);
+								}
+								else
+								{
+									strcat(buffer,empty);
+								}
+								}
+					dataout[q+8].rdpt-=speed;
+					//printf("%s",buffer);
+					//strcat(buffer,temp);
+					//strncpy(output[q+9],buffer,65);
+					strcat(finalout,buffer);
+					strcat(finalout,enter);
+					memset(buffer, 0, sizeof buffer);
+					i=0;
+				}
+
+		strcat(buffer,mag);
+		for (q=0;q<4;q++)
+		{
+
+			for (i=0;i<60;i++)
+								{
+								if (dataout[q+12].r[(dataout[q+12].rdpt)+i]==1)
+								{
+									strcat(buffer,pattern);
+
+								}
+								else
+								{
+									strcat(buffer,empty);
+
+
+								}
+								}
+					dataout[q+12].rdpt-=speed;
+					//printf("%s",buffer);
+					//strcat(buffer,temp);
+					//strncpy(output[q+9],buffer,65);
+					strcat(finalout,buffer);
+					strcat(finalout,enter);
+					memset(buffer, 0, sizeof buffer);
+					i=0;
+				}
+
+		//dataout;
+		//memset(buffer, 0, sizeof buffer);
+	//printf("%s",finalout);
+
+	differ[m]=wait_next_activation(m);
+	printf("%lld\n",differ[m]);
+	m++;
+
+	fflush(stdout);
+	system("clear");
+	memset(space, 0, sizeof space);
+	memset(finalout,0,sizeof finalout);
+	max++;
+}
+}
+/*int main()
+{
+    pthread_t timerA;
+
+    pthread_create(&timerA, NULL, &timerthread,NULL);
+
+
+    pthread_join(timerA, 0);
+    return 0;
+
+}*/
+

@@ -1,0 +1,10 @@
+02:36:38 **** Build of configuration Debug for project ex_iolib ****
+make all 
+Building target: ex_iolib
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc -L"C:\Users\chenbfeng2\workspace\BBBIOlib" -o "ex_iolib"  ./ex_iolib.o   -lpthread -lBBBio
+Finished building target: ex_iolib
+ 
+
+02:36:38 Build Finished (took 470ms)
+

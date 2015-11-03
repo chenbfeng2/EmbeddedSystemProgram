@@ -1,0 +1,10 @@
+02:36:33 **** Rebuild of configuration Debug for project SDL ****
+Info: Internal Builder is used for build
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -o sdl.o "..\\sdl.cpp" 
+..\sdl.cpp:9:17: fatal error: SDL.h: No such file or directory
+ #include <SDL.h>
+                 ^
+compilation terminated.
+
+02:36:34 Build Finished (took 703ms)
+

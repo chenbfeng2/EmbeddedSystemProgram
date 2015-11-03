@@ -1,0 +1,6 @@
+02:36:38 **** Build of configuration Debug for project ex_mutex ****
+make all 
+make: Nothing to be done for `all'.
+
+02:36:39 Build Finished (took 266ms)
+

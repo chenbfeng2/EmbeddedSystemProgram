@@ -1,0 +1,10 @@
+00:30:28 **** Incremental Build of configuration Debug for project newled ****
+make all 
+Building target: newled
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc  -o "newled"  ./led.o   -lpthread -lm -lrt
+Finished building target: newled
+ 
+
+00:30:29 Build Finished (took 453ms)
+

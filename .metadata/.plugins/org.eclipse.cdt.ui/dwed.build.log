@@ -1,0 +1,11 @@
+02:36:35 **** Rebuild of configuration Debug for project dwed ****
+Info: Internal Builder is used for build
+cl /c /EHs /MD /Zi /nologo "/Fodwd\\cew.obj" "..\\dwd\\cew.c" 
+Cannot run program "cl": Launching failed
+
+Error: Program "cl" not found in PATH
+PATH=[C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\Program Files (x86)\Parallels\Parallels Tools\Applications;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Tools\GnuWin32\bin\]
+
+
+02:36:35 Build Finished (took 31ms)
+

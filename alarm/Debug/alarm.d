@@ -1,0 +1,1 @@
+alarm.d: ../alarm.c

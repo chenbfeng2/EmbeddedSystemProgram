@@ -1,0 +1,10 @@
+02:36:32 **** Build of configuration Debug for project Q3 ****
+make all 
+Building target: Q3
+Invoking: Cross GCC Linker
+arm-linux-gnueabihf-gcc -L"C:\Users\chenbfeng2\workspace\BBBIOlib" -o "Q3"  ./question3.o   -lBBBio
+Finished building target: Q3
+ 
+
+02:36:33 Build Finished (took 454ms)
+

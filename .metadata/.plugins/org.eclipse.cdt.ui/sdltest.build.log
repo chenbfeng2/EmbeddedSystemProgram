@@ -1,0 +1,11 @@
+02:36:41 **** Rebuild of configuration Debug for project sdltest ****
+Info: Internal Builder is used for build
+arm-linux-gnueabihf-gcc "-IC:\\Tools\\GCC-linaro\\arm-linux-gnueabihf\\include" "-IC:\\Tools\\GCC-linaro\\arm-linux-gnueabihf\\libc\\usr\\include" -O0 -g3 -Wall -c -fmessage-length=0 -o sdl.o "..\\sdl.c" 
+Cannot run program "arm-linux-gnueabihf-gcc": Launching failed
+
+Error: Program "arm-linux-gnueabihf-gcc" not found in PATH
+PATH=[C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\Program Files (x86)\Parallels\Parallels Tools\Applications;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Tools\GnuWin32\bin\]
+
+
+02:36:41 Build Finished (took 32ms)
+
